@@ -6,6 +6,7 @@
   <title>Sube tus fotos — Steven &amp; Arlette</title>
   <meta name="description" content="Comparte aquí las fotos de nuestra boda. ¡Gracias por capturar estos momentos!">
   <link rel="preconnect" href="https://upload-widget.cloudinary.com">
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
     html, body {
   height: 100%;
@@ -41,9 +42,19 @@ body{
     .monogram{
       font-family: "Georgia", "The Seasons", serif;
       font-size: clamp(32px, 8vw, 72px);
-      letter-spacing: 2px;
-      color:#2d2a26
+      color: #fffbe8;
+      text-shadow: 0 2px 12px #836d26cc, 0 4px 0 #836d26;
+      line-height: 1.0;
+      opacity: 0;
+  transform: translateY(-20px);
+  animation: fadeInTitle 3.2s ease-out forwards;
     }
+    @keyframes fadeInTitle {
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
     main.card {
   background:var(--card);
   max-width:820px;
@@ -127,7 +138,12 @@ footer{
 </head>
 <body>
   <header>
-    <div class="monogram">Steven &amp; Arlette</div>
+    <div class="monogram">
+      <img src="https://res.cloudinary.com/dwgrojove/image/upload/v1755031142/det5fgg4zf8rpoui1ork.png" alt="Logo boda" style="height:48px; margin-bottom:8px; display:block; margin-left:auto; margin-right:auto;">
+      Steven<br>
+      &<br>
+      Arlette
+    </div>
   </header>
 
   <main class="card">
