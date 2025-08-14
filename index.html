@@ -8,74 +8,87 @@
   <link rel="preconnect" href="https://upload-widget.cloudinary.com">
   <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&display=swap" rel="stylesheet">
   <style>
-    html, body {
-  height: 100%;
-  min-height: 100vh;
-}
-html {
-  background: radial-gradient(1200px 800px at 100% -10%, transparent), var(--bg-image);
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-}
     :root{
-      --bg-image:url('https://res.cloudinary.com/dwgrojove/image/upload/v1755023067/gz8z2gy7wdeftwxne58e.jpg');
-      --card:#ffffff62;
+      --card:#ffffff46;
       --ink:#2d2a26;
       --muted:#2d2a26;
       --accent:#836d26;
       --accent-2:#836d26;
+      --veil: .35;               /* velo oscuro sobre las fotos (0–1) */
+      --fade-ms: 1000;           /* duración del crossfade en ms */
     }
-    *{box-sizing:border-box}
-body{
-  margin:0;
-  font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
-  color:var(--ink);
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
+
+    *{ box-sizing:border-box }
+
+    html, body { height: 100%; min-height: 100vh; }
+    body{
+      margin:0;
+      font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+      color:var(--ink);
+      display:flex;
+      flex-direction:column;
+      min-height:100vh;
+      /* quitamos backgrounds heredados para usar las capas .bg */
+      background:#000;
+    }
+
+    /* === Capas de fondo para crossfade === */
+    .bg, .bg-next{
+      position:fixed; inset:0;
+      background-size:cover;
+      background-position:center;
+      background-repeat:no-repeat;
+      z-index:-2;
+      pointer-events:none;
+    }
+    .bg{
+      opacity:1;
+      transition:none;           /* capa base sin transición */
+    }
+    .bg-next{
+      opacity:0;                 /* empieza invisible */
+      transition:opacity 1s ease;
+      z-index:-1;                /* justo encima de .bg pero debajo del contenido */
+    }
+
     header{
       text-align:center;
       padding:48px 16px 16px;
     }
     .monogram{
-      font-family: "The Seasons", "The Seasons", serif;
+      font-family: "The Seasons", serif;
       font-size: clamp(32px, 8vw, 72px);
       color: #ffffff;
       text-shadow: 0 2px 12px #836d26cc, 0 2px 0 #836d26;
       line-height: 1.0;
       opacity: 0;
-  transform: translateY(-20px);
-  animation: fadeInTitle 3.2s ease-out forwards;
+      transform: translateY(-20px);
+      animation: fadeInTitle 3.2s ease-out forwards;
     }
     @keyframes fadeInTitle {
-  to {
-    opacity: 1;
-    transform: none;
-  }
-}
-    main.card {
-  background:var(--card);
-  max-width:820px;
-  margin:64px auto 24px auto; /* <-- aumenta el espacio arriba */
-  padding:24px;
-  border-radius:16px;
-  box-shadow:0 10px 30px rgba(20,16,12,0.08);
-  flex: 1 0 auto;
-}
+      to { opacity:1; transform:none; }
+    }
+
+    main.card{
+      background:var(--card);
+      max-width:820px;
+      margin:64px auto 24px auto;
+      padding:24px;
+      border-radius:16px;
+      box-shadow:0 10px 30px rgba(20,16,12,0.08);
+      flex:1 0 auto;
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+    }
+
     h1{
       font-size: clamp(22px, 4.5vw, 32px);
       margin: 0 0 8px 0;
       font-weight:400;
     }
-    p{line-height:1.55}
-    .actions{
-      display:flex;
-      gap:12px;
-      flex-wrap:wrap;
-      margin-top:16px;
-    }
+    p{ line-height:1.55 }
+
+    .actions{ display:flex; gap:12px; flex-wrap:wrap; margin-top:16px; }
     button{
       appearance:none;
       border:none;
@@ -89,11 +102,8 @@ body{
       box-shadow: 0 6px 16px rgba(181,131,141,.35);
     }
     button:active{ transform: translateY(1px) }
-    .note{
-      font-size:14px;
-      color:var(--muted);
-      margin-top:12px;
-    }
+
+    .note{ font-size:14px; color:var(--muted); margin-top:12px; }
     .success{
       display:none;
       margin-top:16px;
@@ -104,58 +114,57 @@ body{
       color:#155724;
       font-size:14px;
     }
-footer{
-  text-align: center;
-  padding: 24px 0 48px;
-  color: #fffbe8;
-  font-size: 14px;
-  font-weight: 300;
-  text-shadow: 0 2px 12px #836d26cc, 0 1px 0 #836d26;
-  flex-shrink: 0;
-  letter-spacing: 1px;
-}
-    .qr-hint{
-      font-size:13px;
-      color:var(--muted);
-      margin-top:8px;
+
+    footer{
+      text-align: center;
+      padding: 24px 0 48px;
+      color: #fffbe8;
+      font-size: 14px;
+      font-weight: 300;
+      text-shadow: 0 2px 12px #836d26cc, 0 1px 0 #836d26;
+      flex-shrink: 0;
+      letter-spacing: 1px;
     }
+
+    .qr-hint{ font-size:13px; color:var(--muted); margin-top:8px; }
+
     @media (max-width: 600px) {
-  header {
-    padding: 32px 8px 8px;
-  }
-  .card {
-    padding: 12px;
-    margin: 12px 4px;
-  }
-  h1 {
-    font-size: 20px;
-  }
-  button {
-    width: 100%;
-    padding: 12px 0;
-  }
-}
+      header { padding: 32px 8px 8px; }
+      .card { padding: 12px; margin: 12px 4px; }
+      h1 { font-size: 20px; }
+      button { width: 100%; padding: 12px 0; }
+    }
+
+    /* Respeta reducir movimiento */
+    @media (prefers-reduced-motion: reduce){
+      .bg-next{ transition:none; }
+    }
   </style>
   <script src="https://upload-widget.cloudinary.com/latest/global/all.js" type="text/javascript"></script>
 </head>
 <body>
+
+  <!-- Capas de fondo (solo UNA de cada) -->
+  <div class="bg"></div>
+  <div class="bg-next"></div>
+
   <header>
-  <div class="monogram">
-    <img 
-      src="https://res.cloudinary.com/dwgrojove/image/upload/v1755045004/tds5h4teu54f4poiv3wn.png" 
-      alt="Logo boda" 
-      style="
-        height: 150px; 
-        margin-bottom: 16px; 
-        display: block; 
-        margin-left: auto; 
-        margin-right: auto; 
-        filter: drop-shadow(0 4px 16px #836d26cc);
-      "
-    >
-    STEVEN &amp; ARLETTE
-  </div>
-</header>
+    <div class="monogram">
+      <img 
+        src="https://res.cloudinary.com/dwgrojove/image/upload/v1755045004/tds5h4teu54f4poiv3wn.png" 
+        alt="Logo boda" 
+        style="
+          height: 150px; 
+          margin-bottom: 16px; 
+          display: block; 
+          margin-left: auto; 
+          margin-right: auto; 
+          filter: drop-shadow(0 4px 16px #836d26cc);
+        "
+      >
+      STEVEN &amp; ARLETTE
+    </div>
+  </header>
 
   <main class="card">
     <h1>¡Comparte tus fotos con nosotros! 📸</h1>
@@ -165,26 +174,24 @@ footer{
     </div>
     <div id="success" class="success">¡Gracias! Tus archivos se subieron correctamente. ❤️</div>
   </main>
-<div style="flex:4"></div> <!-- Agrega esta línea -->
-  <footer>
-    Hecho con cariño por Steven & Arlette ✨
-  </footer>
 
+  <footer>Hecho con cariño por Steven & Arlette ✨</footer>
+
+  <!-- Cloudinary Upload Widget -->
   <script>
     const CLOUD_NAME = "dwgrojove";
     const UPLOAD_PRESET = "STARWedding";
-    const FOLDER = "boda_steven"; 
+    const FOLDER = "boda_steven";
 
     const widget = cloudinary.createUploadWidget({
       cloudName: CLOUD_NAME,
       uploadPreset: UPLOAD_PRESET,
       sources: ["local","camera"],
       multiple: true,
-      maxFileSize: 100 * 1024 * 1024,
+      maxFileSize: 100 * 1024 * 1024,  // 100 MB
       folder: FOLDER,
       clientAllowedFormats: ["jpg","jpeg","png","heic","heif","webp","mp4","mov"],
       resourceType: "auto",
-      showAdvancedOptions: false,
       theme: "minimal",
     }, (error, result) => {
       if (!error && result && result.event === "success") {
@@ -199,6 +206,47 @@ footer{
     });
 
     document.getElementById("upload_button").addEventListener("click", () => widget.open());
+  </script>
+
+  <!-- Rotador de fondos con crossfade cada 6s -->
+  <script>
+    const backgrounds = [
+      "https://res.cloudinary.com/dwgrojove/image/upload/v1755023067/gz8z2gy7wdeftwxne58e.jpg",
+      "https://res.cloudinary.com/dwgrojove/image/upload/v1755023067/rg8onsr9occvwnd6stjt.jpg",
+      "https://res.cloudinary.com/dwgrojove/image/upload/v1755023072/oldkx4ik0anr7wq4aldp.jpg"
+    ];
+
+    const fadeMs = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--fade-ms')) || 1000;
+    const intervalMs = 8000; // cada 8 s
+
+    const bgEl = document.querySelector(".bg");
+    const bgNextEl = document.querySelector(".bg-next");
+    let current = 0;
+
+    // helper: arma el background con velo
+    const bgWithVeil = (url) =>
+      `linear-gradient(rgba(0,0,0,var(--veil)), rgba(0,0,0,var(--veil))), url('${url}')`;
+
+    // Pre-carga opcional para evitar parpadeo
+    backgrounds.forEach(src => { const i = new Image(); i.src = src; });
+
+    function changeBackground(){
+      const next = (current + 1) % backgrounds.length;
+      // coloca la próxima imagen en .bg-next y la hace visible (fade-in)
+      bgNextEl.style.backgroundImage = bgWithVeil(backgrounds[next]);
+      bgNextEl.style.opacity = '1';
+
+      // cuando termina el fade, pasamos esa imagen a .bg y ocultamos .bg-next
+      setTimeout(() => {
+        bgEl.style.backgroundImage = bgNextEl.style.backgroundImage;
+        bgNextEl.style.opacity = '0';
+        current = next;
+      }, fadeMs);
+    }
+
+    // Inicializamos
+    bgEl.style.backgroundImage = bgWithVeil(backgrounds[current]);
+    setInterval(changeBackground, intervalMs);
   </script>
 </body>
 </html>
