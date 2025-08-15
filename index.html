@@ -85,32 +85,22 @@
       flex: 0 0 auto;
       /* opcional: toque de borde para realzar el glass */
       border: 1px solid rgba(255,255,255,0.28);
-
-    @media (max-width: 600px) {
-  main.card{
-    margin: 20px 12px;       /* menos margen lateral */
-    padding: 14px 16px;      /* menos padding interno */
-    border-radius: 12px;     /* esquinas un poco más cerradas */
-  }
-  main.card h1{
-    font-size: 20px;         /* título más compacto */
-    text-align: center;
-  }
-  main.card p{
-    font-size: 14px;
-    text-align: center;
-  }
-  main.card .actions{
-    flex-direction: column;  /* botones uno debajo del otro */
-    gap: 10px;
-  }
-  main.card button{
-    width: 100%;             /* botón ocupa todo el ancho */
-    padding: 12px 0;
-    font-size: 15px;
-  }
     }
-  }
+
+    /* ===== Mobile: card más compacta, textos centrados, botón full-width ===== */
+    @media (max-width: 600px) {
+      header { padding: 32px 8px 8px; }
+      main.card{
+        margin:20px 12px;
+        padding:14px 16px;
+        border-radius:12px;
+      }
+      main.card h1{ font-size:20px; text-align:center; }
+      main.card p{ font-size:14px; text-align:center; }
+      main.card .actions{ flex-direction:column; gap:10px; }
+      main.card button{ width:100%; padding:12px 0; font-size:15px; }
+    }
+
 
     h1{
       font-size: clamp(22px, 4.5vw, 32px);
